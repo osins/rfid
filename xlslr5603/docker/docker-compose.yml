@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+  # golang:
+  #   image: wangsying/xlslr5603
+  #   container_name: golang
+  #   hostname: golang
+  #   privileged: true
+  #   ports:
+  #     - "80:80"
+  #   restart: always
+  #   working_dir: /go/src/github/wangsying/rfid/xlslr5603/
+  #   volumes:
+  #     - ./.env:/go/src/github/wangsying/rfid/xlslr5603/.env
+
+  mysql8:
+    image: mysql:8.0.19
+    container_name: mysql8
+    hostname: mysql8
+    privileged: true
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: xlslr5603
+      MYSQL_USER: xlslr5603
+      MYSQL_PASSWORD: xlslr5603
+    volumes:
+      - D:\\works\\data\\mysql\\8.0\\xlslr5603:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    hostname: adminer
+    restart: always
+    ports:
+      - 3307:8080
+
+networks:
+  default:
+    external:
+      name: dev-network
