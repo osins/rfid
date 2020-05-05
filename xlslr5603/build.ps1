@@ -4,4 +4,4 @@ git add .
 git commit -m "build project to docker"
 git push
 
-cd xxslr5603
+cd xlslr5603
