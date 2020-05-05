@@ -12,17 +12,13 @@ import (
 func NewDB() (db *gorm.DB, err error) {
 	if !envIsExists(".env") {
 		if envIsExists("/usr/local/rfid/xlslr5603/.env") {
-			log.Fatal("Error loading .env file, not found.")
 			err = godotenv.Load("/usr/local/rfid/xlslr5603/.env")
-
 			if err != nil {
 				log.Fatal("Error loading .env file: /usr/local/rfid/xlslr5603/.env")
 				return nil, err
 			}
 		} else {
-			log.Fatal("Error loading .env file, not found.")
 			err = godotenv.Load("E:\\go\\github.com\\wangsying\\rfid\\xlslr5603\\.env")
-
 			if err != nil {
 				log.Fatal("Error loading .env file: E:\\go\\github.com\\wangsying\\rfid\\xlslr5603\\.env")
 				return nil, err
@@ -30,7 +26,6 @@ func NewDB() (db *gorm.DB, err error) {
 		}
 	} else {
 		err = godotenv.Load()
-
 		if err != nil {
 			log.Fatal("Error loading .env file")
 			return nil, err
