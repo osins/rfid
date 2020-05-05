@@ -83,13 +83,11 @@ func init() {
 	var err error
 	if !envIsExists(".env") {
 		if envIsExists("/usr/local/rfid/xlslr5603/.env") {
-			log.Fatal("Error loading .env file, not found.")
 			err = godotenv.Load("/usr/local/rfid/xlslr5603/.env")
 			if err != nil {
 				log.Fatal("Error loading .env file: " + err.Error())
 			}
 		} else {
-			log.Fatal("Error loading .env file, not found.")
 			err = godotenv.Load("E:\\go\\github.com\\wangsying\\rfid\\xlslr5603\\.env")
 			if err != nil {
 				log.Fatal("Error loading .env file: " + err.Error())
