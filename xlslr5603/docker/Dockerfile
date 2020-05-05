@@ -7,14 +7,16 @@ RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN go env
 
-RUN cd /go/src/ && git clone https://github.com/wangsying/od.git
-RUN ls /go/src/od
-RUN cd /go/src/od && go mod vendor
-RUN cd /go/src/od && go build
-RUN chmod -R 777 /go/src/od/od
+RUN go get -u -v github.com/wangsying/rfid/xlslr5603
+RUN find / -name xlslr5603
 
-WORKDIR /go/src/od
+RUN mkdir -p /usr/local/rfid/xlslr5603
+COPY .env /usr/local/rfid/xlslr5603
+
+RUN /go/bin/xlslr5603
+
+WORKDIR /go/src/github.com/wangsying/rfid/xlslr5603
 
 EXPOSE 80
 
-CMD ["/go/src/od/od"]
+CMD ["/go/src/github.com/wangsying/rfid/xlslr5603"]
