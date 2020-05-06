@@ -5,32 +5,12 @@ import (
 	"os"
 
 	"github.com/jinzhu/gorm"
-	"github.com/joho/godotenv"
+	"github.com/wangsying/rfid/xlslr5603/env"
 )
 
 // NewDB singleton
 func NewDB() (db *gorm.DB, err error) {
-	if !envIsExists(".env") {
-		if envIsExists("/usr/local/rfid/xlslr5603/.env") {
-			err = godotenv.Load("/usr/local/rfid/xlslr5603/.env")
-			if err != nil {
-				log.Fatal("Error loading .env file: /usr/local/rfid/xlslr5603/.env")
-				return nil, err
-			}
-		} else {
-			err = godotenv.Load("E:\\go\\github.com\\wangsying\\rfid\\xlslr5603\\.env")
-			if err != nil {
-				log.Fatal("Error loading .env file: E:\\go\\github.com\\wangsying\\rfid\\xlslr5603\\.env")
-				return nil, err
-			}
-		}
-	} else {
-		err = godotenv.Load()
-		if err != nil {
-			log.Fatal("Error loading .env file: " + err.Error())
-			return nil, err
-		}
-	}
+	env.NewENV().Load()
 
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
@@ -57,17 +37,4 @@ func NewDB() (db *gorm.DB, err error) {
 	db.DB().SetMaxIdleConns(20)
 
 	return
-}
-
-func envIsExists(path string) bool {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true
-	}
-
-	if os.IsNotExist(err) {
-		return false
-	}
-
-	return false
 }
