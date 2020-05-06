@@ -31,15 +31,15 @@ func (e *env) Load() error {
 
 // env exists 判断配置文件是否存在
 func (e *env) getEnvPath() (env string, err error) {
-	if !e.exists(".env") {
-		if e.exists("/usr/local/rfid/xlslr5603/.env") {
-			return "/usr/local/rfid/xlslr5603/.env", nil
-		} else {
-			return "E:\\go\\github.com\\wangsying\\rfid\\xlslr5603\\.env", nil
-		}
-	} else {
+	if e.exists(".env") {
 		return ".env", nil
 	}
+
+	if e.exists("/usr/local/rfid/xlslr5603/.env") {
+		return "/usr/local/rfid/xlslr5603/.env", nil
+	}
+
+	return "E:\\go\\github.com\\wangsying\\rfid\\xlslr5603\\.env", nil
 }
 
 // exists 判断文件是否存在
