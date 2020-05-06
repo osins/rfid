@@ -6,8 +6,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// NewENV 创建全局变量配置对象
-func NewENV() ENV {
+// New 创建全局变量配置对象
+func New() ENV {
 	return &env{}
 }
 

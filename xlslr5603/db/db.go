@@ -10,7 +10,7 @@ import (
 
 // NewDB singleton
 func NewDB() (db *gorm.DB, err error) {
-	env.NewENV().Load()
+	env.New().Load()
 
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
