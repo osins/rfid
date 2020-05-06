@@ -1,4 +1,4 @@
-### This is a receive api server by rfid reader event
+### This is a receive api server by xlslr5603 rfid reader event
 #### Start up
 ```
 go run main.go
