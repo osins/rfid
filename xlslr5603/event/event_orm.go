@@ -78,7 +78,7 @@ func (e *orm) Exception(ex *ExceptionData) {
 
 	defer orm.Close()
 
-	orm.Model(&ExceptionData{}).Create(ex)
+	orm.Model(&ExceptionData{}).Create(&ex)
 }
 
 func (e *orm) Heart(h *Heart) {
