@@ -1,6 +1,8 @@
 # github.com/buger/jsonparser v0.0.0-20200322175846-f7e751efca13
 ## explicit
 github.com/buger/jsonparser
+# github.com/davecgh/go-spew v1.1.0
+github.com/davecgh/go-spew/spew
 # github.com/go-sql-driver/mysql v1.4.1
 github.com/go-sql-driver/mysql
 # github.com/jinzhu/gorm v1.9.12
@@ -12,5 +14,12 @@ github.com/jinzhu/inflection
 # github.com/joho/godotenv v1.3.0
 ## explicit
 github.com/joho/godotenv
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
+# github.com/stretchr/testify v1.5.1
+## explicit
+github.com/stretchr/testify/assert
 # google.golang.org/appengine v1.4.0
 google.golang.org/appengine/cloudsql
+# gopkg.in/yaml.v2 v2.2.2
+gopkg.in/yaml.v2

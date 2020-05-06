@@ -12,10 +12,10 @@ services:
   #   volumes:
   #     - ./.env:/go/src/github/wangsying/rfid/xlslr5603/.env
 
-  mysql8:
-    image: mysql:8.0.19
-    container_name: mysql8
-    hostname: mysql8
+  mysql:
+    image: mysql:5.6
+    container_name: mysql
+    hostname: mysql
     privileged: true
     ports:
       - "3306:3306"
@@ -27,7 +27,7 @@ services:
       MYSQL_USER: xlslr5603
       MYSQL_PASSWORD: xlslr5603
     volumes:
-      - D:\\works\\data\\mysql\\8.0\\xlslr5603:/var/lib/mysql
+      - D:\\works\\data\\mysql\\xlslr5603:/var/lib/mysql
 
   adminer:
     image: adminer

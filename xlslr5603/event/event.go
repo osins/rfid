@@ -2,8 +2,8 @@ package event
 
 import "github.com/jinzhu/gorm"
 
-// Event Read读写器主动事件
-type Event struct {
+// ReadEvent Read读写器主动事件
+type ReadEvent struct {
 	ReaderName string `json:"reader_name"`
 	EventType  string `json:"event_type"`
 }
@@ -11,7 +11,7 @@ type Event struct {
 // TagData Read读写器事件中的标签数据
 type TagData struct {
 	gorm.Model
-	Event
+	ReadEvent
 	Epc                string `json:"epc"`
 	BankData           string `json:"bank_data"`
 	Antenna            int    `json:"antenna"`
@@ -25,7 +25,7 @@ type TagData struct {
 // ExceptionData Read读写器事件中的异常数据
 type ExceptionData struct {
 	gorm.Model
-	Event
+	ReadEvent
 	ErrCode   int    `json:"err_code"`
 	ErrString string `json:"err_string"`
 	Timestamp int64  `json:"timestamp"`
@@ -33,13 +33,13 @@ type ExceptionData struct {
 
 // Heart 心跳事件数据对象
 type Heart struct {
-	Event
+	ReadEvent
 	EventData int `json:"event_data"`
 }
 
 // SyncTime 同步时间请求事件数据对象
 type SyncTime struct {
-	Event
+	ReadEvent
 	EventData struct {
 	} `json:"event_data"`
 }

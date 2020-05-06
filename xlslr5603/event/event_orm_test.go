@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewEventOrm(t *testing.T) {
@@ -11,12 +12,11 @@ func TestNewEventOrm(t *testing.T) {
 		Epc: "2343423",
 	}
 
-	ex := &ExceptionData{
-		ErrCode:   1,
-		ErrString: "this is a test.",
-	}
+	orm := NewOrm()
+	orm.Readed(tag)
+	getTag := orm.GetByID(tag.ID)
 
-	orm := NewEventOrm()
-	orm.Readed(*tag)
-	orm.Exception(*ex)
+	// 测试断言
+	assert.Equal(t, tag.ID, getTag.ID, "对于保存的TagData数据,进行一个验证,看看是否保存成功了,验证的条件是保存的EPC和通过orm返回的ID获取到的TagData的EPC进行比较,如果相等则通过测试")
+	assert.Equal(t, 1, 3, "两个数字的比较,只是一个测试,该错误可以忽略.")
 }

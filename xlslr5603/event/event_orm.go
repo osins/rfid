@@ -16,13 +16,14 @@ func init() {
 	orm.AutoMigrate(&TagData{}, &ExceptionData{})
 }
 
-// NewEventOrm 创建一个事件存储操作对象
-func NewEventOrm() EventOrm {
-	return &eventOrm{}
+// NewOrm 创建一个事件存储操作对象
+func NewOrm() ORM {
+	return &orm{}
 }
 
-// EventOrm 读写器主动事件,数据存储操作
-type EventOrm interface {
+// ORM 读写器主动事件,数据存储操作
+type ORM interface {
+	GetByID(id uint) TagData
 	Readed(tag *TagData)
 	Coming(tag *TagData)
 	Exception(ex *ExceptionData)
@@ -30,10 +31,10 @@ type EventOrm interface {
 	SyncTime()
 }
 
-type eventOrm struct {
+type orm struct {
 }
 
-func (e *eventOrm) Readed(tag *TagData) {
+func (e *orm) GetByID(id uint) TagData {
 	orm, err := db.NewDB()
 	if err != nil {
 		log.Println(err)
@@ -41,10 +42,13 @@ func (e *eventOrm) Readed(tag *TagData) {
 
 	defer orm.Close()
 
-	orm.Model(&TagData{}).Create(tag)
+	var tag TagData
+	orm.Model(&TagData{}).Where("id = ?", id).First(&tag)
+
+	return tag
 }
 
-func (e *eventOrm) Coming(tag *TagData) {
+func (e *orm) Readed(tag *TagData) {
 	orm, err := db.NewDB()
 	if err != nil {
 		log.Println(err)
@@ -52,10 +56,21 @@ func (e *eventOrm) Coming(tag *TagData) {
 
 	defer orm.Close()
 
-	orm.Model(&TagData{}).Create(tag)
+	orm.Model(&TagData{}).Create(&tag)
 }
 
-func (e *eventOrm) Exception(ex *ExceptionData) {
+func (e *orm) Coming(tag *TagData) {
+	orm, err := db.NewDB()
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer orm.Close()
+
+	orm.Model(&TagData{}).Create(&tag)
+}
+
+func (e *orm) Exception(ex *ExceptionData) {
 	orm, err := db.NewDB()
 	if err != nil {
 		log.Println(err)
@@ -64,13 +79,12 @@ func (e *eventOrm) Exception(ex *ExceptionData) {
 	defer orm.Close()
 
 	orm.Model(&ExceptionData{}).Create(ex)
+}
+
+func (e *orm) Heart(h *Heart) {
 
 }
 
-func (e *eventOrm) Heart(h *Heart) {
-
-}
-
-func (e *eventOrm) SyncTime() {
+func (e *orm) SyncTime() {
 
 }
