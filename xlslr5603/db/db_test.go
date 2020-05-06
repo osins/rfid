@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"testing"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -12,6 +11,6 @@ func TestNewDB(t *testing.T) {
 	defer db.Close()
 
 	if err != nil {
-		fmt.Println(err)
+		t.Fatal(err.Error())
 	}
 }

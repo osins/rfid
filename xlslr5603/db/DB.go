@@ -25,7 +25,6 @@ func NewDB() (db *gorm.DB, err error) {
 	db, err = gorm.Open("mysql", dsn)
 	if err != nil {
 		panic("failed to connect database: " + err.Error())
-		return
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
