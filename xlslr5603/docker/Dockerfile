@@ -1,15 +1,9 @@
 
 FROM golang as builder
 
-# RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
-# COPY ./sources.aliyun.list /etc/apt/sources.list
-
-# RUN go env -w GO111MODULE=on
-# RUN go env -w GOPROXY=https://goproxy.cn,direct
-# RUN go env
-
-# RUN go get -u -v github.com/wangsying/rfid/xlslr5603
-# RUN find / -name xlslr5603
+RUN go env -w GO111MODULE=on
+RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN go env
 
 RUN cd /tmp && git clone https://github.com/wangsying/rfid.git
 RUN cd /tmp/rfid/xlslr5603 && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o serve -ldflags="-w -s" main.go
