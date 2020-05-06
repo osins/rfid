@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /go/src/rfid/xlslr5603
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
