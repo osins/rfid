@@ -10,8 +10,10 @@ import (
 )
 
 func main() {
+	// 数据迁移(初始化数据结构)
 	event.New().AutoMigrate()
 
+	// 载入服务启动后的host和port配置
 	listenHost := os.Getenv("LISTEN_HOST")
 	listenPort := os.Getenv("LISTEN_PORT")
 
