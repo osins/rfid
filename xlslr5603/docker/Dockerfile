@@ -1,13 +1,10 @@
 
 FROM scratch
 
-RUN mkdir -p /usr/local/rfid/xlslr5603
-ADD ./server /usr/local/rfid/xlslr5603/
+COPY server /
 
-RUN chmod 777 /usr/local/rfid/xlslr5603/server
-
-WORKDIR /usr/local/rfid/xlslr5603
+WORKDIR /
 
 EXPOSE 80
 
-CMD ["/usr/local/rfid/xlslr5603/server"]
+CMD ["/server"]
