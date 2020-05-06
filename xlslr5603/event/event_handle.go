@@ -27,7 +27,7 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 
 	readerName, _ := jsonparser.GetString(s, "reader_name")
 	eventType, _ := jsonparser.GetString(s, "event_type")
-	remoteAddr := r.Header.Get("X-Forwarded-For")
+	remoteAddr := r.Header.Get("X-Real-IP")
 
 	log.Println("reader_name: " + readerName)
 	log.Println("event_type: " + eventType)
