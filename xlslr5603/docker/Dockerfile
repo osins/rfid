@@ -1,8 +1,5 @@
 
-FROM golang
-
-RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
-COPY ./sources.aliyun.list /etc/apt/sources.list
+FROM scratch
 
 RUN mkdir -p /usr/local/rfid/xlslr5603
 COPY .env /usr/local/rfid/xlslr5603
