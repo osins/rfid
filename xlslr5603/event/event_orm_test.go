@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewEventOrm(t *testing.T) {
+func TestNewOrm(t *testing.T) {
 	tag := &TagData{
 		Epc: "2343423",
 	}
@@ -18,5 +18,4 @@ func TestNewEventOrm(t *testing.T) {
 
 	// 测试断言
 	assert.Equal(t, tag.ID, getTag.ID, "对于保存的TagData数据,进行一个验证,看看是否保存成功了,验证的条件是保存的EPC和通过orm返回的ID获取到的TagData的EPC进行比较,如果相等则通过测试")
-	assert.Equal(t, 1, 3, "两个数字的比较,只是一个测试,该错误可以忽略.")
 }

@@ -2,18 +2,32 @@ package event
 
 import (
 	"log"
+	"sync"
 
 	"github.com/wangsying/rfid/xlslr5603/db"
 )
 
+var once sync.Once
+
 func init() {
+	once.Do(autoMigrate)
+}
+
+func autoMigrate() {
 	orm, err := db.NewDB()
 	if err != nil {
 		log.Println(err)
 	}
 
 	defer orm.Close()
+
 	orm.AutoMigrate(&TagData{}, &ExceptionData{})
+
+	orm.Model(&TagData{}).AddIndex("idx_epc", "epc")
+	orm.Model(&TagData{}).AddIndex("idx_reader_name", "reader_name")
+	orm.Model(&TagData{}).AddIndex("idx_event_type", "event_type")
+	orm.Model(&TagData{}).AddIndex("idx_antenna", "antenna")
+	orm.Model(&TagData{}).AddIndex("idx_reader_event_antenna", "reader_name", "antenna", "event_type")
 }
 
 // NewOrm 创建一个事件存储操作对象
