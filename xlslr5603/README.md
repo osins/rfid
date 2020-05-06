@@ -1,5 +1,5 @@
 ### This is a receive api server by xlslr5603 rfid reader event
-#### Start up
+#### Start up:
 ```
 go run main.go
 ```
@@ -19,7 +19,7 @@ DB_NAME=xlslr5603
 DB_TABLE_PREFIX=slr5603_
 ```
 
-#### Docker start up
+#### Docker start up:
 ```
 docker run -it wangsying/rfid-xlslr560
 ```
