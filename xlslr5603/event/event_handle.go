@@ -47,7 +47,7 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 			log.Println("tag_bank_data: ", tag.BankData)
 			log.Println("tag_antenna: ", tag.Antenna)
 
-			orm := NewOrm()
+			orm := New()
 			orm.Readed(tag)
 		}, "event_data")
 	case "tag_coming":
@@ -64,7 +64,7 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 			log.Println("tag_bank_data: ", tag.BankData)
 			log.Println("tag_antenna: ", tag.Antenna)
 
-			orm := NewOrm()
+			orm := New()
 			orm.Readed(tag)
 		}, "event_data")
 	case "reader_exception":
@@ -78,7 +78,7 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 			log.Println("err_string: ", ex.ErrString)
 			log.Println("timestamp: ", ex.Timestamp)
 
-			orm := NewOrm()
+			orm := New()
 			orm.Exception(ex)
 		}, "event_data")
 	case "heart_beat":

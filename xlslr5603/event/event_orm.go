@@ -6,8 +6,8 @@ import (
 	"github.com/wangsying/rfid/xlslr5603/db"
 )
 
-// NewOrm 创建一个事件存储操作对象
-func NewOrm() ORM {
+// New 创建一个事件存储操作对象
+func New() ORM {
 	return &orm{}
 }
 

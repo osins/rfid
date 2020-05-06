@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewOrm(t *testing.T) {
+func TestNew(t *testing.T) {
 	tag := &TagData{
 		Epc: "2343423",
 	}
 
-	orm := NewOrm()
+	orm := New()
 	orm.Readed(tag)
 	getTag := orm.GetByID(tag.ID)
 
