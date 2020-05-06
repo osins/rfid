@@ -2,8 +2,7 @@
 FROM scratch
 
 RUN mkdir -p /usr/local/rfid/xlslr5603
-COPY .env /usr/local/rfid/xlslr5603
-COPY ./server /usr/local/rfid/xlslr5603/server
+ADD ./server /usr/local/rfid/xlslr5603/
 
 RUN chmod 777 /usr/local/rfid/xlslr5603/server
 
