@@ -27,6 +27,7 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 
 	readerName, _ := jsonparser.GetString(s, "reader_name")
 	eventType, _ := jsonparser.GetString(s, "event_type")
+	remoteAddr := r.RemoteAddr
 
 	log.Println("reader_name: " + readerName)
 	log.Println("event_type: " + eventType)
@@ -35,9 +36,13 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 	case "tag_read":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 			tag := &TagData{}
+
 			json.Unmarshal(value, &tag)
+
 			tag.ReaderName = readerName
 			tag.EventType = eventType
+			tag.RemoteAddr = remoteAddr
+
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
 			log.Println("tag_antenna: ", tag.Antenna)
@@ -48,9 +53,13 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 	case "tag_coming":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 			tag := &TagData{}
+
 			json.Unmarshal(value, &tag)
+
 			tag.ReaderName = readerName
 			tag.EventType = eventType
+			tag.RemoteAddr = remoteAddr
+
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
 			log.Println("tag_antenna: ", tag.Antenna)
@@ -64,6 +73,7 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 			json.Unmarshal(value, &ex)
 			ex.ReaderName = readerName
 			ex.EventType = eventType
+
 			log.Println("err_code: ", ex.ErrCode)
 			log.Println("err_string: ", ex.ErrString)
 			log.Println("timestamp: ", ex.Timestamp)

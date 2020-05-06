@@ -6,6 +6,7 @@ import "github.com/jinzhu/gorm"
 type ReadEvent struct {
 	ReaderName string `json:"reader_name"`
 	EventType  string `json:"event_type"`
+	RemoteAddr string `json:r.remote_addr`
 }
 
 // TagData Read读写器事件中的标签数据
