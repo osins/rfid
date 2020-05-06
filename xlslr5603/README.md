@@ -1,10 +1,10 @@
-### this is rfid reader event receive api server
-#### start up
+### This is a receive api server by rfid reader event
+#### Start up
 ```
 go run main.go
 ```
 
-#### set databases config(root dir .env file):
+#### Set databases config(root dir .env file):
 ```
 .env
 
@@ -19,12 +19,12 @@ DB_NAME=xlslr5603
 DB_TABLE_PREFIX=slr5603_
 ```
 
-#### docker start up
+#### Docker start up
 ```
 docker run -it wangsying/rfid-xlslr560
 ```
 
-#### or exec ./build.ps1 to build your own docker container:
+#### Or exec ./build.ps1 to build your own docker container:
 ```
 ./build.ps1
 ```
