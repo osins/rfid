@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	event.NewOrm().AutoMigrate()
+
 	listenHost := os.Getenv("LISTEN_HOST")
 	listenPort := os.Getenv("LISTEN_PORT")
 
