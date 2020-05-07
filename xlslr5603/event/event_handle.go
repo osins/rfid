@@ -23,7 +23,10 @@ type handle struct {
 }
 
 func (e *handle) ReaderEventHandle(c *gin.Context) {
-	s, _ := c.GetRawData() //把  body 内容读入字符串 s
+	s, err := c.GetRawData() //把  body 内容读入字符串 s
+	if err != nil {
+		log.Println("gin context error: " + err.Error())
+	}
 
 	deviceName := c.Param("device_name")
 	readerName, _ := jsonparser.GetString(s, "reader_name")
