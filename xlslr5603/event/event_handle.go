@@ -41,10 +41,10 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 
 			json.Unmarshal(value, &tag)
 
-			tag.DeviceName = deviceName
-			tag.ReaderName = readerName
-			tag.EventType = eventType
-			tag.RemoteAddr = remoteAddr
+			tag.DeviceName = strings.TrimSpace(deviceName)
+			tag.ReaderName = strings.TrimSpace(readerName)
+			tag.EventType = strings.TrimSpace(eventType)
+			tag.RemoteAddr = strings.TrimSpace(remoteAddr)
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
@@ -59,10 +59,10 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 
 			json.Unmarshal(value, &tag)
 
-			tag.DeviceName = deviceName
-			tag.ReaderName = readerName
-			tag.EventType = eventType
-			tag.RemoteAddr = remoteAddr
+			tag.DeviceName = strings.TrimSpace(deviceName)
+			tag.ReaderName = strings.TrimSpace(readerName)
+			tag.EventType = strings.TrimSpace(eventType)
+			tag.RemoteAddr = strings.TrimSpace(remoteAddr)
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
@@ -76,10 +76,10 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 			ex := &ExceptionData{}
 			json.Unmarshal(value, &ex)
 
-			ex.DeviceName = deviceName
-			ex.ReaderName = readerName
-			ex.EventType = eventType
-			ex.RemoteAddr = remoteAddr
+			ex.DeviceName = strings.TrimSpace(deviceName)
+			ex.ReaderName = strings.TrimSpace(readerName)
+			ex.EventType = strings.TrimSpace(eventType)
+			ex.RemoteAddr = strings.TrimSpace(remoteAddr)
 
 			log.Println("err_code: ", ex.ErrCode)
 			log.Println("err_string: ", ex.ErrString)
