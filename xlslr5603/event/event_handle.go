@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"log"
+	"strings"
 
 	"github.com/buger/jsonparser"
 	"github.com/gin-gonic/gin"
@@ -33,17 +34,17 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 	log.Println("reader_name: " + readerName)
 	log.Println("event_type: " + eventType)
 
-	switch eventType {
+	switch strings.TrimSpace(eventType) {
 	case "tag_read":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 			tag := &TagData{}
 
 			json.Unmarshal(value, &tag)
 
-			tag.ReadEvent.DeviceName = deviceName
-			tag.ReadEvent.ReaderName = readerName
-			tag.ReadEvent.EventType = eventType
-			tag.ReadEvent.RemoteAddr = remoteAddr
+			tag.DeviceName = deviceName
+			tag.ReaderName = readerName
+			tag.EventType = eventType
+			tag.RemoteAddr = remoteAddr
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
@@ -58,10 +59,10 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 
 			json.Unmarshal(value, &tag)
 
-			tag.ReadEvent.DeviceName = deviceName
-			tag.ReadEvent.ReaderName = readerName
-			tag.ReadEvent.EventType = eventType
-			tag.ReadEvent.RemoteAddr = remoteAddr
+			tag.DeviceName = deviceName
+			tag.ReaderName = readerName
+			tag.EventType = eventType
+			tag.RemoteAddr = remoteAddr
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
@@ -75,10 +76,10 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 			ex := &ExceptionData{}
 			json.Unmarshal(value, &ex)
 
-			ex.ReadEvent.DeviceName = deviceName
-			ex.ReadEvent.ReaderName = readerName
-			ex.ReadEvent.EventType = eventType
-			ex.ReadEvent.RemoteAddr = remoteAddr
+			ex.DeviceName = deviceName
+			ex.ReaderName = readerName
+			ex.EventType = eventType
+			ex.RemoteAddr = remoteAddr
 
 			log.Println("err_code: ", ex.ErrCode)
 			log.Println("err_string: ", ex.ErrString)

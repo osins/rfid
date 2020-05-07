@@ -1,6 +1,7 @@
 package event
 
 import (
+	"encoding/json"
 	"testing"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -8,12 +9,22 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	tag := &TagData{
-		ReadEvent: ReadEvent{
-			DeviceName: "wahshhsd",
-		},
-		Epc: "E20041453116009820603EFF",
-	}
+	data := []byte(`{
+	"reader_name": "silion_reader/192.168.1.100",
+	"event_type": "tag_coming",
+	"epc": "E20041453116009820603EFF",
+	"bank_data": "",
+	"antenna": 3,
+	"read_count": 30,
+	"protocol": 5,
+	"rssi": -63,
+	"firstseen_timestamp": 1550734256000,
+	"lastseen_timestamp": 1550734272000
+	}`)
+
+	tag := &TagData{}
+
+	json.Unmarshal(data, &tag)
 
 	orm := New()
 	orm.Readed(tag)

@@ -7,7 +7,7 @@ type ReadEvent struct {
 	DeviceName string `json:"device_name"`
 	ReaderName string `json:"reader_name"`
 	EventType  string `json:"event_type"`
-	RemoteAddr string `json:remote_addr`
+	RemoteAddr string `json:"remote_addr"`
 }
 
 // TagData Read读写器事件中的标签数据
