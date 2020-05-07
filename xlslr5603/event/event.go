@@ -4,6 +4,7 @@ import "github.com/jinzhu/gorm"
 
 // ReadEvent Read读写器主动事件
 type ReadEvent struct {
+	DeviceName string `json:"device_name"`
 	ReaderName string `json:"reader_name"`
 	EventType  string `json:"event_type"`
 	RemoteAddr string `json:remote_addr`

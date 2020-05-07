@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/wangsying/rfid/xlslr5603/event"
 )
@@ -20,9 +20,8 @@ func main() {
 	log.Println("start rfid service " + listenHost + ":" + listenPort + ", request waiting ...")
 
 	event := event.NewHandle()
-	http.HandleFunc("/boyang/xlslr5603/active-request", event.ReaderEventHandle) //设置访问的路由
-	err := http.ListenAndServe(listenHost+":"+listenPort, nil)                   //设置监听的端口
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+
+	r := gin.Default()
+	r.GET("/boyang/xlslr5603/active-request/:device_name", event.ReaderEventHandle)
+	r.Run(listenHost + ":" + listenPort) // listen and serve on 0.0.0.0:8080
 }

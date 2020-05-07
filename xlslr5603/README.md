@@ -28,3 +28,20 @@ docker run -it wangsying/rfid-xlslr560
 ```
 ./build.ps1
 ```
+
+#### About build smallest docker container:
+```
+
+FROM golang as builder
+
+RUN cd /tmp && git clone https://github.com/wangsying/rfid.git
+RUN cd /tmp/rfid/xlslr5603 && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o serve -ldflags="-w -s" main.go
+
+FROM scratch
+COPY --from=builder /tmp/rfid/xlslr5603/serve /
+
+WORKDIR /
+EXPOSE 80
+
+CMD ["/serve"]
+```

@@ -9,7 +9,10 @@ import (
 
 func TestNew(t *testing.T) {
 	tag := &TagData{
-		Epc: "2343423",
+		ReadEvent: ReadEvent{
+			DeviceName: "wahshhsd",
+		},
+		Epc: "E20041453116009820603EFF",
 	}
 
 	orm := New()

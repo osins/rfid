@@ -2,11 +2,10 @@ package event
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
-	"net/http"
 
 	"github.com/buger/jsonparser"
+	"github.com/gin-gonic/gin"
 )
 
 // NewHandle 创建Reader主动事件(来自Handle接口)
@@ -16,19 +15,21 @@ func NewHandle() Handle {
 
 // Handle Reader 主动事件接口
 type Handle interface {
-	ReaderEventHandle(w http.ResponseWriter, r *http.Request)
+	ReaderEventHandle(c *gin.Context)
 }
 
 type handle struct {
 }
 
-func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
-	s, _ := ioutil.ReadAll(r.Body) //把  body 内容读入字符串 s
+func (e *handle) ReaderEventHandle(c *gin.Context) {
+	s, _ := c.GetRawData() //把  body 内容读入字符串 s
 
+	deviceName := c.Param("device_name")
 	readerName, _ := jsonparser.GetString(s, "reader_name")
 	eventType, _ := jsonparser.GetString(s, "event_type")
-	remoteAddr := r.Header.Get("X-Real-IP")
+	remoteAddr := c.ClientIP()
 
+	log.Println("device_name: " + deviceName)
 	log.Println("reader_name: " + readerName)
 	log.Println("event_type: " + eventType)
 
@@ -39,9 +40,10 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 
 			json.Unmarshal(value, &tag)
 
-			tag.ReaderName = readerName
-			tag.EventType = eventType
-			tag.RemoteAddr = remoteAddr
+			tag.ReadEvent.DeviceName = deviceName
+			tag.ReadEvent.ReaderName = readerName
+			tag.ReadEvent.EventType = eventType
+			tag.ReadEvent.RemoteAddr = remoteAddr
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
@@ -56,9 +58,10 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 
 			json.Unmarshal(value, &tag)
 
-			tag.ReaderName = readerName
-			tag.EventType = eventType
-			tag.RemoteAddr = remoteAddr
+			tag.ReadEvent.DeviceName = deviceName
+			tag.ReadEvent.ReaderName = readerName
+			tag.ReadEvent.EventType = eventType
+			tag.ReadEvent.RemoteAddr = remoteAddr
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
@@ -71,8 +74,11 @@ func (e *handle) ReaderEventHandle(w http.ResponseWriter, r *http.Request) {
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 			ex := &ExceptionData{}
 			json.Unmarshal(value, &ex)
-			ex.ReaderName = readerName
-			ex.EventType = eventType
+
+			ex.ReadEvent.DeviceName = deviceName
+			ex.ReadEvent.ReaderName = readerName
+			ex.ReadEvent.EventType = eventType
+			ex.ReadEvent.RemoteAddr = remoteAddr
 
 			log.Println("err_code: ", ex.ErrCode)
 			log.Println("err_string: ", ex.ErrString)
