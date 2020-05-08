@@ -22,6 +22,6 @@ func main() {
 	event := event.NewHandle()
 
 	r := gin.Default()
-	r.Any("/boyang/xlslr5603/active-request/:device_name", event.ReaderEventHandle)
+	r.POST("/boyang/xlslr5603/active-request/:device_name", event.ReaderEventHandle)
 	r.Run(listenHost + ":" + listenPort) // listen and serve on 0.0.0.0:8080
 }
