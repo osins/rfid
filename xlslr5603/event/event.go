@@ -2,6 +2,22 @@ package event
 
 import "github.com/jinzhu/gorm"
 
+// Device 设备数据
+type Device struct {
+	gorm.Model
+	DeviceName string `json:"device_name"`
+	ReaderName string `json:"reader_name"`
+}
+
+// Antenna 天线数据
+type Antenna struct {
+	gorm.Model
+	DeviceName string `json:"device_name"`
+	Antenna    int    `json:"antenna"`
+	ReadCount  int    `json:"read_count"`
+	Protocol   int    `json:"protocol"`
+}
+
 // ReadEvent Read读写器主动事件
 type ReadEvent struct {
 	DeviceName string `json:"device_name"`

@@ -14,6 +14,8 @@ func New() ORM {
 // ORM 读写器主动事件,数据存储操作
 type ORM interface {
 	AutoMigrate()
+	CreateOrUpdateDevice(dev *Device)
+	CreateOrUpdateAntenna(deviceName string, ant *Antenna)
 	GetByID(id uint) TagData
 	Readed(tag *TagData)
 	Coming(tag *TagData)
@@ -33,13 +35,49 @@ func (e *orm) AutoMigrate() {
 
 	defer orm.Close()
 
-	orm.AutoMigrate(&TagData{}, &ExceptionData{})
+	orm.AutoMigrate(&Device{}, &Antenna{}, &TagData{}, &ExceptionData{})
 
 	orm.Model(&TagData{}).AddIndex("idx_epc", "epc")
 	orm.Model(&TagData{}).AddIndex("idx_reader_name", "reader_name")
 	orm.Model(&TagData{}).AddIndex("idx_event_type", "event_type")
 	orm.Model(&TagData{}).AddIndex("idx_antenna", "antenna")
 	orm.Model(&TagData{}).AddIndex("idx_reader_event_antenna", "reader_name", "antenna", "event_type")
+}
+
+func (e *orm) CreateOrUpdateDevice(dev *Device) {
+	orm, err := db.NewDB()
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer orm.Close()
+
+	var count int
+	orm.Model(&Device{}).Where("device_name = ?", dev.DeviceName).Count(&count)
+	if count == 0 {
+		orm.Model(&Device{}).Create(&dev)
+		return
+	}
+
+	orm.Model(&Device{}).Where("device_name = ?", dev.DeviceName).Update(&dev)
+}
+
+func (e *orm) CreateOrUpdateAntenna(deviceName string, ant *Antenna) {
+	orm, err := db.NewDB()
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer orm.Close()
+
+	var count int
+	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", deviceName, ant.Antenna).Count(&count)
+	if count == 0 {
+		orm.Model(&Antenna{}).Create(&ant)
+		return
+	}
+
+	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", deviceName, ant.Antenna).Update(&ant)
 }
 
 func (e *orm) GetByID(id uint) TagData {

@@ -37,6 +37,14 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 	log.Println("reader_name: " + readerName)
 	log.Println("event_type: " + eventType)
 
+	dev := &Device{
+		DeviceName: deviceName,
+		ReaderName: readerName,
+	}
+
+	orm := New()
+	orm.CreateOrUpdateDevice(dev)
+
 	switch strings.TrimSpace(eventType) {
 	case "tag_read":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
@@ -49,12 +57,18 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 			tag.EventType = strings.TrimSpace(eventType)
 			tag.RemoteAddr = strings.TrimSpace(remoteAddr)
 
+			ant := &Antenna{
+				DeviceName: deviceName,
+				Antenna:    tag.Antenna,
+				Protocol:   tag.Protocol,
+			}
+
+			orm.Readed(tag)
+			orm.CreateOrUpdateAntenna(deviceName, ant)
+
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
 			log.Println("tag_antenna: ", tag.Antenna)
-
-			orm := New()
-			orm.Readed(tag)
 		}, "event_data")
 	case "tag_coming":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
@@ -67,12 +81,18 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 			tag.EventType = strings.TrimSpace(eventType)
 			tag.RemoteAddr = strings.TrimSpace(remoteAddr)
 
+			ant := &Antenna{
+				DeviceName: deviceName,
+				Antenna:    tag.Antenna,
+				Protocol:   tag.Protocol,
+			}
+
+			orm.Readed(tag)
+			orm.CreateOrUpdateAntenna(deviceName, ant)
+
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
 			log.Println("tag_antenna: ", tag.Antenna)
-
-			orm := New()
-			orm.Readed(tag)
 		}, "event_data")
 	case "reader_exception":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
@@ -88,7 +108,6 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 			log.Println("err_string: ", ex.ErrString)
 			log.Println("timestamp: ", ex.Timestamp)
 
-			orm := New()
 			orm.Exception(ex)
 		}, "event_data")
 	case "heart_beat":
