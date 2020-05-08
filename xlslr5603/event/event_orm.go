@@ -3,6 +3,7 @@ package event
 import (
 	"log"
 
+	"github.com/jinzhu/gorm"
 	"github.com/wangsying/rfid/xlslr5603/db"
 )
 
@@ -15,7 +16,8 @@ func New() ORM {
 type ORM interface {
 	AutoMigrate()
 	CreateOrUpdateDevice(dev *Device)
-	CreateOrUpdateAntenna(deviceName string, ant *Antenna)
+	CreateOrUpdateAntenna(ant *Antenna)
+	AntennaReadCountAdd(ant *Antenna)
 	GetByID(id uint) TagData
 	Readed(tag *TagData)
 	Coming(tag *TagData)
@@ -62,7 +64,7 @@ func (e *orm) CreateOrUpdateDevice(dev *Device) {
 	orm.Model(&Device{}).Where("device_name = ?", dev.DeviceName).Update(&dev)
 }
 
-func (e *orm) CreateOrUpdateAntenna(deviceName string, ant *Antenna) {
+func (e *orm) CreateOrUpdateAntenna(ant *Antenna) {
 	orm, err := db.NewDB()
 	if err != nil {
 		log.Println(err)
@@ -71,13 +73,24 @@ func (e *orm) CreateOrUpdateAntenna(deviceName string, ant *Antenna) {
 	defer orm.Close()
 
 	var count int
-	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", deviceName, ant.Antenna).Count(&count)
+	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", ant.DeviceName, ant.Antenna).Count(&count)
 	if count == 0 {
 		orm.Model(&Antenna{}).Create(&ant)
 		return
 	}
 
-	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", deviceName, ant.Antenna).Update(&ant)
+	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", ant.DeviceName, ant.Antenna).Update(&ant)
+}
+
+func (e *orm) AntennaReadCountAdd(ant *Antenna) {
+	orm, err := db.NewDB()
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer orm.Close()
+
+	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", ant.DeviceName, ant.Antenna).UpdateColumn("read_count", gorm.Expr("read_count + ?", 1))
 }
 
 func (e *orm) GetByID(id uint) TagData {

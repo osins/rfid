@@ -64,7 +64,8 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 			}
 
 			orm.Readed(tag)
-			orm.CreateOrUpdateAntenna(deviceName, ant)
+			orm.CreateOrUpdateAntenna(ant)
+			orm.AntennaReadCountAdd(ant)
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
@@ -88,7 +89,8 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 			}
 
 			orm.Readed(tag)
-			orm.CreateOrUpdateAntenna(deviceName, ant)
+			orm.CreateOrUpdateAntenna(ant)
+			orm.AntennaReadCountAdd(ant)
 
 			log.Println("tag_epc: ", tag.Epc)
 			log.Println("tag_bank_data: ", tag.BankData)
