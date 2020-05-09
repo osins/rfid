@@ -9,7 +9,7 @@ RUN go env -w CGO_LDFLAGS="-w -s"
 RUN go env
 
 RUN cd /tmp && git clone https://github.com/wangsying/rfid.git
-RUN cd /tmp/rfid/xlslr5603 && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o serve main.go
+RUN cd /tmp/rfid/xlslr5603 && go build -a -installsuffix cgo -o serve main.go
 RUN ls /tmp/rfid/xlslr5603
 
 FROM scratch

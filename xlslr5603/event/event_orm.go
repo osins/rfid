@@ -19,8 +19,9 @@ type ORM interface {
 	CreateOrUpdateAntenna(ant *Antenna)
 	AntennaReadCountAdd(ant *Antenna)
 	GetByID(id uint) TagData
+	TagLog(tag *TagLog)
 	Readed(tag *TagData)
-	Coming(tag *TagData)
+	Coming(tag *TagLog)
 	Exception(ex *ExceptionData)
 	Heart(h *Heart)
 	SyncTime()
@@ -37,7 +38,7 @@ func (e *orm) AutoMigrate() {
 
 	defer orm.Close()
 
-	orm.AutoMigrate(&Device{}, &Antenna{}, &TagData{}, &ExceptionData{})
+	orm.AutoMigrate(&Device{}, &Antenna{}, &TagData{}, &TagLog{}, &ExceptionData{})
 
 	orm.Model(&TagData{}).AddIndex("idx_epc", "epc")
 	orm.Model(&TagData{}).AddIndex("idx_reader_name", "reader_name")
@@ -107,6 +108,17 @@ func (e *orm) GetByID(id uint) TagData {
 	return tag
 }
 
+func (e *orm) TagLog(tag *TagLog) {
+	orm, err := db.NewDB()
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer orm.Close()
+
+	orm.Model(&TagLog{}).Create(&tag)
+}
+
 func (e *orm) Readed(tag *TagData) {
 	orm, err := db.NewDB()
 	if err != nil {
@@ -115,10 +127,17 @@ func (e *orm) Readed(tag *TagData) {
 
 	defer orm.Close()
 
-	orm.Model(&TagData{}).Create(&tag)
+	var count int
+	orm.Model(&TagData{}).Where("event_type = ? and epc = ?", tag.EventType, tag.Epc).Count(&count)
+	if count == 0 {
+		orm.Model(&TagData{}).Create(&tag)
+		return
+	}
+
+	orm.Model(&TagData{}).Where("event_type = ? and epc = ?", tag.EventType, tag.Epc).Update(&tag)
 }
 
-func (e *orm) Coming(tag *TagData) {
+func (e *orm) Coming(tag *TagLog) {
 	orm, err := db.NewDB()
 	if err != nil {
 		log.Println(err)
@@ -126,7 +145,7 @@ func (e *orm) Coming(tag *TagData) {
 
 	defer orm.Close()
 
-	orm.Model(&TagData{}).Create(&tag)
+	orm.Model(&TagLog{}).Create(&tag)
 }
 
 func (e *orm) Exception(ex *ExceptionData) {

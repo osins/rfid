@@ -49,13 +49,20 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 	case "tag_read":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 			tag := &TagData{}
-
 			json.Unmarshal(value, &tag)
+
+			taglog := &TagLog{}
+			json.Unmarshal(value, &taglog)
 
 			tag.DeviceName = strings.TrimSpace(deviceName)
 			tag.ReaderName = strings.TrimSpace(readerName)
 			tag.EventType = strings.TrimSpace(eventType)
 			tag.RemoteAddr = strings.TrimSpace(remoteAddr)
+
+			taglog.DeviceName = strings.TrimSpace(deviceName)
+			taglog.ReaderName = strings.TrimSpace(readerName)
+			taglog.EventType = strings.TrimSpace(eventType)
+			taglog.RemoteAddr = strings.TrimSpace(remoteAddr)
 
 			ant := &Antenna{
 				DeviceName: deviceName,
@@ -63,6 +70,7 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 				Protocol:   tag.Protocol,
 			}
 
+			orm.TagLog(taglog)
 			orm.Readed(tag)
 			orm.CreateOrUpdateAntenna(ant)
 			orm.AntennaReadCountAdd(ant)
@@ -74,13 +82,20 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 	case "tag_coming":
 		jsonparser.ArrayEach(s, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 			tag := &TagData{}
-
 			json.Unmarshal(value, &tag)
+
+			taglog := &TagLog{}
+			json.Unmarshal(value, &taglog)
 
 			tag.DeviceName = strings.TrimSpace(deviceName)
 			tag.ReaderName = strings.TrimSpace(readerName)
 			tag.EventType = strings.TrimSpace(eventType)
 			tag.RemoteAddr = strings.TrimSpace(remoteAddr)
+
+			taglog.DeviceName = strings.TrimSpace(deviceName)
+			taglog.ReaderName = strings.TrimSpace(readerName)
+			taglog.EventType = strings.TrimSpace(eventType)
+			taglog.RemoteAddr = strings.TrimSpace(remoteAddr)
 
 			ant := &Antenna{
 				DeviceName: deviceName,
@@ -88,6 +103,7 @@ func (e *handle) ReaderEventHandle(c *gin.Context) {
 				Protocol:   tag.Protocol,
 			}
 
+			orm.TagLog(taglog)
 			orm.Readed(tag)
 			orm.CreateOrUpdateAntenna(ant)
 			orm.AntennaReadCountAdd(ant)

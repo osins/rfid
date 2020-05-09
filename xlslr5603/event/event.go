@@ -40,6 +40,11 @@ type TagData struct {
 	LastseenTimestamp  int64  `json:"lastseen_timestamp"`
 }
 
+// TagLog read读写器事件中的标签读取日志
+type TagLog struct {
+	TagData
+}
+
 // ExceptionData Read读写器事件中的异常数据
 type ExceptionData struct {
 	gorm.Model

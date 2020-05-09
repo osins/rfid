@@ -11,10 +11,10 @@ import (
 func TestNew(t *testing.T) {
 	data := []byte(`{
 	"reader_name": "silion_reader/192.168.1.100",
-	"event_type": "tag_coming",
+	"event_type": "tag_read",
 	"epc": "E20041453116009820603EFF",
 	"bank_data": "",
-	"antenna": 3,
+	"antenna": 7,
 	"read_count": 30,
 	"protocol": 5,
 	"rssi": -63,
@@ -23,10 +23,14 @@ func TestNew(t *testing.T) {
 	}`)
 
 	tag := &TagData{}
-
 	json.Unmarshal(data, &tag)
 
+	taglog := &TagLog{}
+	json.Unmarshal(data, &taglog)
+
 	orm := New()
+	orm.AutoMigrate()
+	orm.TagLog(taglog)
 	orm.Readed(tag)
 	getTag := orm.GetByID(tag.ID)
 
