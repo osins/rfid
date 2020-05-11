@@ -2,6 +2,7 @@ package event
 
 import (
 	"log"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	"github.com/wangsying/rfid/xlslr5603/db"
@@ -55,6 +56,8 @@ func (e *orm) CreateOrUpdateDevice(dev *Device) {
 
 	defer orm.Close()
 
+	dev.Enabled = true
+
 	var count int
 	orm.Model(&Device{}).Where("device_name = ?", dev.DeviceName).Count(&count)
 	if count == 0 {
@@ -73,6 +76,8 @@ func (e *orm) CreateOrUpdateAntenna(ant *Antenna) {
 
 	defer orm.Close()
 
+	ant.Enabled = true
+
 	var count int
 	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", ant.DeviceName, ant.Antenna).Count(&count)
 	if count == 0 {
@@ -90,6 +95,24 @@ func (e *orm) AntennaReadCountAdd(ant *Antenna) {
 	}
 
 	defer orm.Close()
+
+	exists := &Antenna{}
+	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", ant.DeviceName, ant.Antenna).First(&exists)
+	if !ant.Enabled {
+		return
+	}
+
+	log.Printf("antenna: %d", exists.Antenna)
+
+	now := time.Now()
+
+	log.Printf("now: %s", now)
+	log.Printf("up: %d", ant.UpTime)
+	log.Printf("down: %d", ant.DownTime)
+
+	if (ant.UpTime > 0 && now.Hour() < ant.UpTime) || (ant.DownTime > 0 && now.Hour() > ant.DownTime) {
+		return
+	}
 
 	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", ant.DeviceName, ant.Antenna).UpdateColumn("read_count", gorm.Expr("read_count + ?", 1))
 }
@@ -126,6 +149,24 @@ func (e *orm) Readed(tag *TagData) {
 	}
 
 	defer orm.Close()
+
+	ant := &Antenna{}
+	orm.Model(&Antenna{}).Where("device_name = ? and antenna = ?", tag.DeviceName, tag.Antenna).First(&ant)
+	if !ant.Enabled {
+		return
+	}
+
+	log.Printf("antenna: %d", ant.Antenna)
+
+	now := time.Now()
+
+	log.Printf("now: %s", now)
+	log.Printf("up: %d", ant.UpTime)
+	log.Printf("down: %d", ant.DownTime)
+
+	if (ant.UpTime > 0 && now.Hour() < ant.UpTime) || (ant.DownTime > 0 && now.Hour() > ant.DownTime) {
+		return
+	}
 
 	var count int
 	orm.Model(&TagData{}).Where("event_type = ? and epc = ?", tag.EventType, tag.Epc).Count(&count)

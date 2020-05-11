@@ -1,6 +1,8 @@
 package event
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 // Device 设备数据
 type Device struct {
@@ -18,6 +20,8 @@ type Antenna struct {
 	ReadCount  int    `json:"read_count"`
 	Protocol   int    `json:"protocol"`
 	Enabled    bool   `json:"reader_enabled"`
+	UpTime     int
+	DownTime   int
 }
 
 // ReadEvent Read读写器主动事件
